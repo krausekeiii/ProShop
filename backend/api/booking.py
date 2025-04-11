@@ -1,0 +1,1 @@
+# api path to find tee times given user specified date, time, and geolocation
