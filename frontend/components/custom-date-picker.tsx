@@ -17,6 +17,7 @@ import {
   subMonths,
   isAfter,
   isBefore,
+  isToday,
 } from "date-fns"
 
 interface CustomDatePickerProps {
@@ -65,19 +66,29 @@ export function CustomDatePicker({ selected, onSelect, minDate, maxDate }: Custo
   const days = eachDayOfInterval({ start: startDate, end: endDate })
 
   return (
-    <div className="p-3">
-      <div className="flex items-center justify-between mb-4">
-        <Button variant="outline" size="icon" onClick={prevMonth} className="h-7 w-7">
+    <div className="p-4">
+      <div className="mb-6 flex items-center justify-between">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={prevMonth}
+          className="h-8 w-8 rounded-full text-gray-500 hover:bg-gray-100 hover:text-masters-green"
+        >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <h2 className="text-sm font-medium">{format(currentMonth, "MMMM yyyy")}</h2>
-        <Button variant="outline" size="icon" onClick={nextMonth} className="h-7 w-7">
+        <h2 className="text-base font-medium text-gray-800">{format(currentMonth, "MMMM yyyy")}</h2>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={nextMonth}
+          className="h-8 w-8 rounded-full text-gray-500 hover:bg-gray-100 hover:text-masters-green"
+        >
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
-      <div className="grid grid-cols-7 gap-1 mb-2">
+      <div className="mb-2 grid grid-cols-7 gap-1">
         {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-          <div key={day} className="text-center text-xs text-muted-foreground">
+          <div key={day} className="text-center text-xs font-medium text-gray-500">
             {day}
           </div>
         ))}
@@ -87,6 +98,7 @@ export function CustomDatePicker({ selected, onSelect, minDate, maxDate }: Custo
           const isCurrentMonth = isSameMonth(day, currentMonth)
           const isSelected = selectedDate ? isSameDay(day, selectedDate) : false
           const isDisabled = isDateDisabled(day)
+          const isDayToday = isToday(day)
 
           return (
             <Button
@@ -94,9 +106,11 @@ export function CustomDatePicker({ selected, onSelect, minDate, maxDate }: Custo
               variant="ghost"
               size="sm"
               className={cn(
-                "h-8 w-8 p-0 font-normal",
-                !isCurrentMonth && "text-muted-foreground opacity-50",
-                isSelected && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
+                "h-9 w-9 rounded-full p-0 font-normal",
+                !isCurrentMonth && "text-gray-300",
+                isCurrentMonth && !isSelected && !isDayToday && "text-gray-700 hover:bg-gray-100",
+                isDayToday && !isSelected && "border border-masters-green text-masters-green",
+                isSelected && "bg-masters-green text-white hover:bg-masters-green/90",
                 isDisabled && "pointer-events-none opacity-30",
               )}
               disabled={isDisabled}

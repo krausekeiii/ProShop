@@ -53,6 +53,14 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Masters color scheme
+        masters: {
+          green: "#006747", // Augusta National Green
+          white: "#ffffff",
+          yellow: "#ffcd00", // Masters Yellow
+          red: "#e31837", // Masters Red
+        },
+        // Keep the green shades for backward compatibility
         green: {
           50: "#f0fdf4",
           100: "#dcfce7",

@@ -4,48 +4,72 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Masters color scheme as CSS variables */
+    --masters-green: 152 100% 20%; /* #006747 in HSL */
+    --masters-white: 0 0% 100%; /* #ffffff in HSL */
+    --masters-yellow: 49 100% 50%; /* #ffcd00 in HSL */
+    --masters-red: 350 80% 50%; /* #e31837 in HSL */
+
+    /* Map the Masters colors to the theme */
+    --background: var(--masters-white);
     --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
+
+    --card: var(--masters-white);
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
+
+    --popover: var(--masters-white);
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 355.7 100% 97.3%;
+
+    --primary: var(--masters-green);
+    --primary-foreground: var(--masters-white);
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
+
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+
+    --accent: var(--masters-yellow);
     --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+
+    --destructive: var(--masters-red);
+    --destructive-foreground: var(--masters-white);
+
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 142.1 76.2% 36.3%;
+    --ring: var(--masters-green);
+
     --radius: 0.5rem;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
+
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 142.1 70.6% 45.3%;
-    --primary-foreground: 144.9 80.4% 10%;
+
+    --primary: var(--masters-green);
+    --primary-foreground: var(--masters-white);
+
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
+
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+
+    --accent: var(--masters-yellow);
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+
+    --destructive: var(--masters-red);
+    --destructive-foreground: var(--masters-white);
+
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 142.4 71.8% 29.2%;
+    --ring: var(--masters-green);
   }
 }
 
@@ -66,4 +90,41 @@
 /* Improve input contrast on transparent backgrounds */
 .search-input {
   @apply bg-white/90 backdrop-blur-sm;
+}
+
+/* Masters color utility classes */
+.text-masters-green {
+  color: theme("colors.masters.green");
+}
+
+.text-masters-yellow {
+  color: theme("colors.masters.yellow");
+}
+
+.text-masters-red {
+  color: theme("colors.masters.red");
+}
+
+.bg-masters-green {
+  background-color: theme("colors.masters.green");
+}
+
+.bg-masters-yellow {
+  background-color: theme("colors.masters.yellow");
+}
+
+.bg-masters-red {
+  background-color: theme("colors.masters.red");
+}
+
+.border-masters-green {
+  border-color: theme("colors.masters.green");
+}
+
+.border-masters-yellow {
+  border-color: theme("colors.masters.yellow");
+}
+
+.border-masters-red {
+  border-color: theme("colors.masters.red");
 }

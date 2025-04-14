@@ -15,7 +15,24 @@ FIREBASE_AUTH_URL = f"https://identitytoolkit.googleapis.com/v1/accounts:signInW
 def sign_up(req: SignUpRequest):
     try:
         user = AuthService.sign_up(req.email, req.password, req.display_name)
-        return {"message": "User created successfully", "user": user}
+
+        # Immediately sign in to get tokens
+        payload = {
+            "email": req.email,
+            "password": req.password,
+            "returnSecureToken": True
+        }
+        response = requests.post(FIREBASE_AUTH_URL, json=payload)
+        if response.status_code != 200:
+            raise HTTPException(status_code=500, detail="User created but failed to retrieve tokens")
+
+        data = response.json()
+        return {
+            "message": "User created successfully",
+            "idToken": data["idToken"],
+            "refreshToken": data["refreshToken"],
+            "expiresIn": data["expiresIn"]
+        }
     except ValueError as ve:
         raise HTTPException(status_code=400, detail=str(ve))
 
@@ -34,6 +51,9 @@ def sign_in(req: SignInRequest):
     return {
         "idToken": data["idToken"],            # Use for auth on client
         "refreshToken": data["refreshToken"],  # Can be used to re-auth
-        "expiresIn": data["expiresIn"]
+        "expiresIn": data["expiresIn"],
+        "user": {
+            "email": data["email"],
+            "name": data["displayName"]
+        }
     }
-
