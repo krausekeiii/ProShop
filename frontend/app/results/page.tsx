@@ -1,8 +1,12 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import { ArrowLeft, Calendar, Clock, Filter, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import CourseCard from "@/components/course-card"
+import { AuthModal } from "@/components/auth-modal"
 
 // Mock data for search results
 const mockCourses = [
@@ -74,6 +78,7 @@ export default function ResultsPage({
 }: {
   searchParams: { date?: string; time?: string; location?: string }
 }) {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const { date = "2025-04-12", time = "09:00", location = "Philadelphia, PA" } = searchParams
 
   // Format the date for display
@@ -92,7 +97,7 @@ export default function ResultsPage({
             <span className="text-xl">⛳</span>
             <span>Golf Assistant</span>
           </Link>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => setIsAuthModalOpen(true)}>
             Sign In
           </Button>
         </div>
@@ -175,6 +180,8 @@ export default function ResultsPage({
           ))}
         </div>
       </main>
+
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </div>
   )
 }

@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, Star, MapPin, Sun, Cloud, CloudRain, Phone, Globe, Heart } from "lucide-react"
@@ -6,6 +9,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { AuthModal } from "@/components/auth-modal"
+import { BookingModal } from "@/components/booking-modal"
 
 // Mock data for course details
 const courseDetails = {
@@ -76,6 +81,14 @@ const courseDetails = {
 }
 
 export default function CoursePage({ params }: { params: { id: string } }) {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
+  const [selectedTeeTime, setSelectedTeeTime] = useState<{
+    time: string
+    price: string
+    date: string
+  } | null>(null)
+
   // Function to render weather icon based on condition
   const renderWeatherIcon = (condition: string) => {
     switch (condition.toLowerCase()) {
@@ -92,6 +105,19 @@ export default function CoursePage({ params }: { params: { id: string } }) {
     }
   }
 
+  const handleBookTeeTime = (time: string, price: string, date: string) => {
+    setSelectedTeeTime({
+      time: new Date(`2025-01-01T${time}`).toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }),
+      price,
+      date,
+    })
+    setIsBookingModalOpen(true)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="sticky top-0 z-10 border-b bg-white">
@@ -100,7 +126,7 @@ export default function CoursePage({ params }: { params: { id: string } }) {
             <span className="text-xl">⛳</span>
             <span>Golf Assistant</span>
           </Link>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => setIsAuthModalOpen(true)}>
             Sign In
           </Button>
         </div>
@@ -229,7 +255,11 @@ export default function CoursePage({ params }: { params: { id: string } }) {
                           <span className="mb-3 text-sm text-muted-foreground">
                             {teeTime.available} {teeTime.available === 1 ? "spot" : "spots"} available
                           </span>
-                          <Button size="sm" className="w-full bg-green-600 hover:bg-green-700">
+                          <Button
+                            size="sm"
+                            className="w-full bg-green-600 hover:bg-green-700"
+                            onClick={() => handleBookTeeTime(teeTime.time, teeTime.price, day.date)}
+                          >
                             Book Now
                           </Button>
                           <Button variant="ghost" size="sm" className="mt-1 w-full text-xs">
@@ -262,6 +292,21 @@ export default function CoursePage({ params }: { params: { id: string } }) {
           </div>
         </div>
       </footer>
+
+      {selectedTeeTime && (
+        <BookingModal
+          isOpen={isBookingModalOpen}
+          onClose={() => setIsBookingModalOpen(false)}
+          courseInfo={{
+            name: courseDetails.name,
+            teeTime: selectedTeeTime.time,
+            date: selectedTeeTime.date,
+            price: selectedTeeTime.price,
+          }}
+        />
+      )}
+
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </div>
   )
 }
